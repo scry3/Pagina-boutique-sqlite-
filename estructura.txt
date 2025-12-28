@@ -1,0 +1,54 @@
+
+/front
+│
+├── index.html
+├── foro.html
+├── noticias.html
+├── contacto.html
+│
+├── css
+│   ├── main.css
+│   ├── foro.css
+│   ├── noticias.css
+│   └── admin.css
+│
+├── js
+│   ├── main.js
+│   ├── foro.js
+│   ├── noticias.js
+│   └── admin.js
+│
+├── assets
+│   ├── img
+│   └── icons
+│
+└── admin
+    └── admin.html
+
+/back
+│
+├── app.js
+├── server.js
+│
+├── db
+│   └── sqlite.js
+│
+├── init
+│   └── initDb.js
+|
+├── routes
+│   ├── noticias.routes.js
+│   ├── foro.routes.js
+│   └── admin.routes.js
+│
+├── controllers
+│   ├── noticias.controller.js
+│   ├── foro.controller.js
+│   └── admin.controller.js
+│
+├── models
+│   ├── Noticia.js
+│   └── ForoPost.js
+│
+└── middlewares
+    └── adminAuth.js

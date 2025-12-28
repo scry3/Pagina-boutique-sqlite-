@@ -1,0 +1,132 @@
+/* =========================
+   VARIABLES GLOBALES (NOTICIAS)
+   ========================= */
+:root {
+    --bg-main: #0f172a;
+    --bg-header: #020617;
+    --bg-card: #1e293b;
+    --text-main: #e5e7eb;
+    --text-secondary: #94a3b8;
+    --accent: #38bdf8;
+}
+
+/* =========================
+   RESET
+   ========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+/* =========================
+   HEADER
+   ========================= */
+.header {
+    background-color: var(--bg-header);
+    border-bottom: 1px solid var(--bg-card);
+}
+
+.nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px;
+
+    display: flex;
+    gap: 20px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: var(--text-secondary);
+}
+
+.nav a:hover {
+    color: var(--accent);
+}
+
+/* =========================
+   MAIN
+   ========================= */
+.main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* =========================
+   TÍTULO
+   ========================= */
+.page-title {
+    text-align: center;
+}
+
+.page-title h1 {
+    font-size: 2.2rem;
+}
+
+.page-title p {
+    margin-top: 8px;
+    color: var(--text-secondary);
+}
+
+/* =========================
+   BLOQUES DE NOTICIAS
+   ========================= */
+#noticias-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.bloque {
+    background-color: var(--bg-card);
+    padding: 20px;
+    border-radius: 14px;
+
+    display: flex;
+    gap: 20px;
+}
+
+/* orden normal: imagen - texto */
+.bloque.imagen-texto {
+    flex-direction: row;
+}
+
+/* invertido: texto - imagen */
+.bloque.texto-imagen {
+    flex-direction: row-reverse;
+}
+
+.bloque-texto {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.bloque-img img {
+    width: 220px;
+    border-radius: 10px;
+    display: block;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+.footer {
+    margin-top: 60px;
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--bg-card);
+}

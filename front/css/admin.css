@@ -1,0 +1,101 @@
+:root {
+    --bg: #f0f0f0;
+    --panel: #ffffff;
+    --text: #222;
+    --border: #ccc;
+    --primary: #222;
+    --danger: #b00020;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+header {
+    padding: 1rem;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+main {
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* Panel general */
+.panel {
+    background: var(--panel);
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+input,
+textarea,
+select {
+    padding: 0.6rem;
+    border: 1px solid var(--border);
+    font-size: 1rem;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Botones */
+button {
+    padding: 0.6rem 1rem;
+    border: none;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button.danger {
+    background: var(--danger);
+}
+
+/* Bloques cargados (noticias / foro) */
+.bloque-admin {
+    border: 1px solid var(--border);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bloque-admin img {
+    max-width: 120px;
+}
+
+/* Acciones */
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}

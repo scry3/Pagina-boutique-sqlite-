@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Librería</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">Inicio</a>
+            <a href="../noticias.html">Noticias</a>
+            <a href="../foro.html">Foro</a>
+            <button id="logout-btn">Cerrar sesión</button>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <h1>Panel de Administración</h1>
+
+        <!-- FORMULARIO NOTICIAS -->
+        <section class="admin-section">
+            <h2>Crear Noticia</h2>
+            <form id="form-noticia" enctype="multipart/form-data">
+                <input type="text" name="titulo" placeholder="Título" required>
+                <textarea name="contenido" placeholder="Contenido" required></textarea>
+                <select name="tipo">
+                    <option value="imagen-texto">Imagen-Texto</option>
+                    <option value="texto-imagen">Texto-Imagen</option>
+                </select>
+                <input type="file" name="imagenFile" accept="image/*">
+                <button type="submit">Agregar Noticia</button>
+            </form>
+            <div id="noticias-admin"></div>
+        </section>
+
+        <!-- FORMULARIO FORO -->
+        <section class="admin-section">
+            <h2>Crear Post Foro</h2>
+            <form id="form-foro" enctype="multipart/form-data">
+                <input type="text" name="titulo" placeholder="Título" required>
+                <textarea name="contenido" placeholder="Contenido" required></textarea>
+                <select name="tipo">
+                    <option value="imagen-texto">Imagen-Texto</option>
+                    <option value="texto-imagen">Texto-Imagen</option>
+                </select>
+                <input type="file" name="imagenFile" accept="image/*">
+                <button type="submit">Agregar Post</button>
+            </form>
+            <div id="foro-admin"></div>
+        </section>
+    </main>
+
+    <script src="../js/admin.js"></script>
+</body>
+</html>

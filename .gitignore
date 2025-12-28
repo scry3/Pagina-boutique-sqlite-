@@ -1,0 +1,14 @@
+# Node
+node_modules/
+
+# Base de datos SQLite
+*.db
+
+# Variables de entorno
+.env
+
+# Archivos subidos (imagenes del admin)
+public/uploads/
+
+# Logs
+npm-debug.log*
