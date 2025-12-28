@@ -1,11 +1,9 @@
 const express = require('express');
 const session = require('express-session');
-const cors = require('cors');
 const path = require('path');
 const app = express();
 
 // Middlewares
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -17,15 +15,17 @@ app.use(session({
     cookie: { maxAge: 2 * 60 * 60 * 1000 } // 2 horas
 }));
 
-// Servir archivos públicos (imagenes)
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+// Servir FRONT (HTML, CSS, JS, assets)
+app.use(express.static(path.join(__dirname, '../front')));
 
-// Rutas
+// Ruta raíz → index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../front/index.html'));
+});
+
+// Rutas API
 app.use('/api/admin', require('./routes/admin.routes'));
 app.use('/api/noticias', require('./routes/noticias.routes'));
 app.use('/api/foro', require('./routes/foro.routes'));
-
-app.use(express.static(path.join(__dirname, '../front')));
-
 
 module.exports = app;

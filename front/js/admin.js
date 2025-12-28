@@ -6,7 +6,8 @@ const foroContainer = document.getElementById('foro-admin');
 
 const logoutBtn = document.getElementById('logout-btn');
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = '/api';
+
 
 // --- CARGAR NOTICIAS ---
 async function cargarNoticias() {
