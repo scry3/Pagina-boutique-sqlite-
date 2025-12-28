@@ -15,8 +15,11 @@ app.use(session({
     cookie: { maxAge: 2 * 60 * 60 * 1000 } // 2 horas
 }));
 
-// Servir FRONT (HTML, CSS, JS, assets)
+// Servir FRONT (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, '../front')));
+
+// 👉 Servir uploads e imágenes
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Ruta raíz → index.html
 app.get('/', (req, res) => {
