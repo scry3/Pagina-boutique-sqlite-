@@ -1,8 +1,6 @@
 const db = require('../db/sqlite');
 const bcrypt = require('bcrypt');
 const cloudinary = require('../cloudinary');
-const fs = require('fs');
-const path = require('path');
 
 // --- LOGIN ADMIN ---
 exports.login = (req, res) => {
@@ -40,9 +38,6 @@ exports.createNoticia = async (req, res) => {
         try {
             const result = await cloudinary.uploader.upload(req.file.path, { folder: "noticias" });
             imagen_url = result.secure_url;
-
-            // Opcional: borrar archivo local después de subir
-            fs.unlinkSync(req.file.path);
         } catch (err) {
             return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary' });
         }
@@ -70,9 +65,6 @@ exports.createForoPost = async (req, res) => {
         try {
             const result = await cloudinary.uploader.upload(req.file.path, { folder: "foro" });
             imagen_url = result.secure_url;
-
-            // Opcional: borrar archivo local después de subir
-            fs.unlinkSync(req.file.path);
         } catch (err) {
             return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary' });
         }
@@ -95,21 +87,17 @@ exports.createForoPost = async (req, res) => {
 // --- ELIMINAR NOTICIA ---
 exports.deleteNoticia = (req, res) => {
     const { id } = req.params;
-    db.get(`SELECT imagen_url FROM noticias WHERE id = ?`, [id], (err, row) => {
-        if (row && row.imagen_url && row.imagen_url.startsWith('/uploads/')) {
-            fs.unlinkSync(path.join(__dirname, '../public', row.imagen_url));
-        }
-        db.run(`DELETE FROM noticias WHERE id = ?`, [id], () => res.json({ ok: true }));
+    db.run(`DELETE FROM noticias WHERE id = ?`, [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Error al borrar noticia' });
+        res.json({ ok: true });
     });
 };
 
 // --- ELIMINAR POST FORO ---
 exports.deleteForoPost = (req, res) => {
     const { id } = req.params;
-    db.get(`SELECT imagen_url FROM foro_posts WHERE id = ?`, [id], (err, row) => {
-        if (row && row.imagen_url && row.imagen_url.startsWith('/uploads/')) {
-            fs.unlinkSync(path.join(__dirname, '../public', row.imagen_url));
-        }
-        db.run(`DELETE FROM foro_posts WHERE id = ?`, [id], () => res.json({ ok: true }));
+    db.run(`DELETE FROM foro_posts WHERE id = ?`, [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Error al borrar post' });
+        res.json({ ok: true });
     });
 };
