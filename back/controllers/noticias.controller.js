@@ -15,6 +15,9 @@ exports.getAll = (req, res) => {
 
 // Crear noticia
 exports.createNoticia = async (req, res) => {
+    console.log('req.body:', req.body);
+    console.log('req.file:', req.file);
+
     let imagen_url = null;
 
     if (req.file) {

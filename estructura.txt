@@ -29,6 +29,7 @@
 │
 ├── app.js
 ├── server.js
+├── cloudinary.js
 │
 ├── db
 │   └── sqlite.js
@@ -46,9 +47,6 @@
 │   ├── foro.controller.js
 │   └── admin.controller.js
 │
-├── models
-│   ├── Noticia.js
-│   └── ForoPost.js
 │
 └── middlewares
     └── adminAuth.js
