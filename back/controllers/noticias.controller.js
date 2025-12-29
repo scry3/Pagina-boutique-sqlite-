@@ -33,8 +33,11 @@ exports.createNoticia = async (req, res) => {
             const result = await streamUpload(req.file.buffer);
             imagen_url = result.secure_url;
         } catch (err) {
-            console.error('Error Cloudinary:', err);
-            return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary' });
+            console.error('Error Cloudinary:', err);    
+            console.error('Error Cloudinary completo:', err);
+            console.error('Error Cloudinary mensaje:', err.message);
+            console.error('Error Cloudinary stack:', err.stack);
+            return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary', details: err.message });
         }
     } else if (req.body.imagenUrl) {
         imagen_url = req.body.imagenUrl;
