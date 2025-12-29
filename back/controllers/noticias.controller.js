@@ -1,6 +1,5 @@
 const db = require('../db/sqlite');
-const fs = require('fs');
-const path = require('path');
+const cloudinary = require('../cloudinary');
 
 // Obtener todas las noticias
 exports.getAll = (req, res) => {
@@ -18,11 +17,16 @@ exports.getAll = (req, res) => {
 };
 
 // Crear noticia
-exports.createNoticia = (req, res) => {
+exports.createNoticia = async (req, res) => {
     let imagen_url = null;
 
     if (req.file) {
-        imagen_url = '/uploads/' + req.file.filename;
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, { folder: "noticias" });
+            imagen_url = result.secure_url;
+        } catch (err) {
+            return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary' });
+        }
     } else if (req.body.imagenUrl) {
         imagen_url = req.body.imagenUrl;
     }
@@ -52,27 +56,12 @@ exports.createNoticia = (req, res) => {
 exports.deleteNoticia = (req, res) => {
     const { id } = req.params;
 
-    db.get(
-        `SELECT imagen_url FROM noticias WHERE id = ?`,
+    db.run(
+        `DELETE FROM noticias WHERE id = ?`,
         [id],
-        (err, row) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ error: 'Error al borrar noticia' });
-            }
-
-            if (row?.imagen_url && row.imagen_url.startsWith('/uploads/')) {
-                const imgPath = path.join(__dirname, '../public', row.imagen_url);
-                if (fs.existsSync(imgPath)) {
-                    fs.unlinkSync(imgPath);
-                }
-            }
-
-            db.run(
-                `DELETE FROM noticias WHERE id = ?`,
-                [id],
-                () => res.json({ ok: true })
-            );
+        (err) => {
+            if (err) return res.status(500).json({ error: 'Error al borrar noticia' });
+            res.json({ ok: true });
         }
     );
 };
