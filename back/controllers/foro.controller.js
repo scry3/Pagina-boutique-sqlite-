@@ -1,28 +1,43 @@
 const db = require('../db/sqlite');
 const cloudinary = require('../cloudinary');
 
-// Obtener todos los posts
+// Obtener todos los posts del foro
 exports.getAll = (req, res) => {
     db.all(
         `SELECT * FROM foro_posts ORDER BY fecha_creacion DESC`,
         [],
         (err, rows) => {
-            if (err) return res.status(500).json({ error: 'Error al obtener foro' });
+            if (err) return res.status(500).json({ error: 'Error al obtener posts del foro' });
             res.json(rows);
         }
     );
 };
 
-// Crear post
+// Crear post en el foro
 exports.createForoPost = async (req, res) => {
+    console.log('req.body:', req.body);
+    console.log('req.file:', req.file);
+
     let imagen_url = null;
 
     if (req.file) {
         try {
-            const result = await cloudinary.uploader.upload(req.file.path, { folder: "foro" });
+            // Subida usando buffer con upload_stream, igual que Noticias
+            const streamUpload = (fileBuffer) =>
+                new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        { folder: 'foro' },
+                        (error, result) => (result ? resolve(result) : reject(error))
+                    );
+                    stream.end(fileBuffer);
+                });
+            const result = await streamUpload(req.file.buffer);
             imagen_url = result.secure_url;
         } catch (err) {
-            return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary' });
+            console.error('Error Cloudinary completo:', err);
+            console.error('Error Cloudinary mensaje:', err.message);
+            console.error('Error Cloudinary stack:', err.stack);
+            return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary', details: err.message });
         }
     } else if (req.body.imagenUrl) {
         imagen_url = req.body.imagenUrl;
@@ -33,7 +48,7 @@ exports.createForoPost = async (req, res) => {
     db.run(
         `INSERT INTO foro_posts (titulo, contenido, tipo, imagen_url)
          VALUES (?, ?, ?, ?)`,
-        [titulo, contenido, tipo || 'imagen-texto', imagen_url],
+        [titulo, contenido, tipo === 'texto-imagen' ? 'texto-imagen' : 'imagen-texto', imagen_url],
         (err) => {
             if (err) return res.status(500).json({ error: 'Error al crear post' });
             res.json({ ok: true });
@@ -41,7 +56,7 @@ exports.createForoPost = async (req, res) => {
     );
 };
 
-// Borrar post
+// Borrar post del foro
 exports.deleteForoPost = (req, res) => {
     const { id } = req.params;
 
