@@ -18,8 +18,8 @@ app.use(session({
 // Servir FRONT (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, '../front')));
 
-// 👉 Servir uploads e imágenes
-app.use(express.static(path.join(__dirname, 'public')));
+// Servir uploads e imágenes(localmente)
+//app.use(express.static(path.join(__dirname, 'public')));
 
 // Ruta raíz → index.html
 app.get('/', (req, res) => {

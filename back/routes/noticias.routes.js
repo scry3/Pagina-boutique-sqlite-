@@ -4,7 +4,8 @@ const noticiasController = require('../controllers/noticias.controller');
 const adminAuth = require('../middlewares/adminAuth');
 const multer = require('multer');
 
-const upload = multer({ dest: 'public/uploads/' });
+// Multer temporal solo para procesar archivos en memoria antes de subirlos a Cloudinary
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Rutas públicas
 router.get('/', noticiasController.getAll);
