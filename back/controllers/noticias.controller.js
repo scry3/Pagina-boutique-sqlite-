@@ -1,7 +1,7 @@
 const db = require('../db/sqlite');
 const cloudinary = require('../cloudinary');
 
-// Obtener todas las noticias
+// --- Obtener todas las noticias ---
 exports.getAll = (req, res) => {
     db.all(
         `SELECT * FROM noticias ORDER BY fecha_creacion DESC`,
@@ -16,15 +16,29 @@ exports.getAll = (req, res) => {
     );
 };
 
-// Crear noticia
+// --- Crear noticia ---
 exports.createNoticia = async (req, res) => {
     let imagen_url = null;
 
+    // Subida a Cloudinary desde buffer si se envía archivo
     if (req.file) {
         try {
-            const result = await cloudinary.uploader.upload(req.file.path, { folder: "noticias" });
+            const streamUpload = (fileBuffer) => {
+                return new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        { folder: 'noticias' },
+                        (error, result) => {
+                            if (result) resolve(result);
+                            else reject(error);
+                        }
+                    );
+                    stream.end(fileBuffer);
+                });
+            };
+            const result = await streamUpload(req.file.buffer);
             imagen_url = result.secure_url;
         } catch (err) {
+            console.error('Error Cloudinary:', err);
             return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary' });
         }
     } else if (req.body.imagenUrl) {
@@ -34,8 +48,7 @@ exports.createNoticia = async (req, res) => {
     const { titulo, contenido, tipo } = req.body;
 
     db.run(
-        `INSERT INTO noticias (titulo, contenido, tipo, imagen_url)
-         VALUES (?, ?, ?, ?)`,
+        `INSERT INTO noticias (titulo, contenido, tipo, imagen_url) VALUES (?, ?, ?, ?)`,
         [
             titulo,
             contenido,
@@ -52,7 +65,7 @@ exports.createNoticia = async (req, res) => {
     );
 };
 
-// Borrar noticia
+// --- Borrar noticia ---
 exports.deleteNoticia = (req, res) => {
     const { id } = req.params;
 
