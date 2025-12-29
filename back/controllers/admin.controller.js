@@ -1,5 +1,6 @@
 const db = require('../db/sqlite');
 const bcrypt = require('bcrypt');
+const cloudinary = require('../cloudinary');
 const fs = require('fs');
 const path = require('path');
 
@@ -32,20 +33,24 @@ exports.logout = (req, res) => {
 };
 
 // --- CREAR NOTICIA ---
-exports.createNoticia = (req, res) => {
-    console.log(req.file);
-    console.log(req.body);
+exports.createNoticia = async (req, res) => {
     let imagen_url = null;
 
     if (req.file) {
-        imagen_url = '/uploads/' + req.file.filename; // ruta pública
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, { folder: "noticias" });
+            imagen_url = result.secure_url;
+
+            // Opcional: borrar archivo local después de subir
+            fs.unlinkSync(req.file.path);
+        } catch (err) {
+            return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary' });
+        }
     } else if (req.body.imagenUrl) {
         imagen_url = req.body.imagenUrl;
     }
 
     const { titulo, contenido } = req.body;
-    
-    console.log('Datos recibidos para crear noticia:', { titulo, contenido, imagen_url });
 
     db.run(
         `INSERT INTO noticias (titulo, contenido, imagen_url) VALUES (?, ?, ?)`,
@@ -58,11 +63,19 @@ exports.createNoticia = (req, res) => {
 };
 
 // --- CREAR POST FORO ---
-exports.createForoPost = (req, res) => {
+exports.createForoPost = async (req, res) => {
     let imagen_url = null;
 
     if (req.file) {
-        imagen_url = '/uploads/' + req.file.filename;
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, { folder: "foro" });
+            imagen_url = result.secure_url;
+
+            // Opcional: borrar archivo local después de subir
+            fs.unlinkSync(req.file.path);
+        } catch (err) {
+            return res.status(500).json({ error: 'Error subiendo la imagen a Cloudinary' });
+        }
     } else if (req.body.imagenUrl) {
         imagen_url = req.body.imagenUrl;
     }

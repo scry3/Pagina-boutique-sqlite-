@@ -5,7 +5,8 @@ const controller = require('../controllers/admin.controller');
 const adminAuth = require('../middlewares/adminAuth');
 
 const multer = require('multer');
-const upload = multer({ dest: 'public/uploads/' });
+const upload = multer({ storage: multer.memoryStorage() });
+
 
 /* =========================
    AUTH
